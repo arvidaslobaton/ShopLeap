@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS", // Adjust module system as needed (ESNext or ES6)
+    "lib": ["ESNext"], // Ensure necessary ECMAScript libraries are included
+    "esModuleInterop": true, // Maintain interoperability if using ES Modules
+    "skipLibCheck": true,
+    // "strict": true, // Enable strict mode
+    "moduleResolution": "Node", // Ensure Node.js module resolution
+    "outDir": "dist", // Output directory for compiled files
+    "experimentalDecorators": true, // Enable experimental decorators if needed
+    "baseUrl": ".", // Base URL for module resolution
+    "rootDir": "src", // Root directory of TypeScript source files
+    "strictNullChecks": true, // Enforce strict null checks
+    "paths": {
+      "@/*": ["src/*"] // Optional: Setup module aliases if needed
+    },
+    "types": [
+      "node",
+      "express", // Ensure 'express' is included if not already
+      "./src/types/express.d.ts" // Include your custom type definitions
+    ]
+  },
+  "include": ["src/**/*.ts"], // Include TypeScript files to compile
+  "exclude": ["node_modules"] // Exclude files from compilation
+}
