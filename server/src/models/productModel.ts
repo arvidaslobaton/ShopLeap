@@ -1,4 +1,5 @@
 import mongoose, { Document, Model } from "mongoose";
+import slugify from "slugify";
 
 export interface IProductVariation {
   color: string;
@@ -9,6 +10,7 @@ export interface IProductVariation {
 
 export interface IProduct extends Document {
   name: string;
+  slug: string;
   description?: string;
   vendor: mongoose.Types.ObjectId;
   category: mongoose.Types.ObjectId;
@@ -47,6 +49,10 @@ const productSchema = new mongoose.Schema<IProduct>(
       type: String,
       required: true,
     },
+    slug: {
+      type: String,
+      unique: true,
+    },
     description: String,
     vendor: {
       type: mongoose.Schema.Types.ObjectId,
@@ -56,7 +62,6 @@ const productSchema = new mongoose.Schema<IProduct>(
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
-      required: true,
     },
     subCategory: {
       type: mongoose.Schema.Types.ObjectId,
@@ -65,7 +70,6 @@ const productSchema = new mongoose.Schema<IProduct>(
     brand: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Brand",
-      required: true,
     },
     image: [String],
     variations: [productVariationSchema],
@@ -88,6 +92,11 @@ const productSchema = new mongoose.Schema<IProduct>(
     timestamps: true,
   }
 );
+
+productSchema.pre("save", async function (next) {
+  this.slug = slugify(this.name.toLowerCase());
+  next();
+});
 
 export const Product: Model<IProduct> = mongoose.model<IProduct>(
   "Product",

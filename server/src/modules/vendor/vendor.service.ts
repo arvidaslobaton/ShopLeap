@@ -1,12 +1,11 @@
 import { CreateVendorDto, UpdateVendorDto } from "@/dto/vendor.dto";
 import { Vendor } from "../../models/vendorModel";
-import { HttpNotFoundError } from "../../lib/errors";
+import { HttpBadRequestError, HttpNotFoundError } from "../../lib/errors";
 
 export default class VendorService {
   public async createVendor(vendor: CreateVendorDto) {
     try {
       const newVendor = await Vendor.create(vendor);
-      console.log("newVendor1 ===>", newVendor);
 
       return { data: newVendor };
     } catch (error) {
@@ -26,13 +25,24 @@ export default class VendorService {
 
   public async getVendorBySlug(slug: string) {
     try {
-      const vendor = await Vendor.findOne({ slug: slug }).populate(
+      const vendorSlug = await Vendor.findOne({ slug: slug }).populate(
         "user",
         "-password"
       );
-      return { data: vendor };
+      if (!vendorSlug) {
+        return {
+          error: new HttpNotFoundError(
+            "Vendor with the given slug not found",
+            []
+          ),
+        };
+      }
+      return { data: vendorSlug };
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      return {
+        error: new Error("An error occurred while fetching the vendor"),
+      };
     }
   }
 
@@ -41,14 +51,15 @@ export default class VendorService {
       const vendor = await Vendor.findByIdAndUpdate(id, vendorData, {
         new: true,
       });
-      console.log("newVendor ===>", vendor);
       if (!vendor) {
         return { error: new HttpNotFoundError("Vendor not found", []) };
       }
-
       return { data: vendor };
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      return {
+        error: new Error("An error occurred while updating the vendor"),
+      };
     }
   }
 
@@ -60,7 +71,10 @@ export default class VendorService {
       }
       return { data: vendor };
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      return {
+        error: new Error("An error occurred while deleting the vendor"),
+      };
     }
   }
 }

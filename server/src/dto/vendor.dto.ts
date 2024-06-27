@@ -57,32 +57,32 @@ class SubscriptionDto {
 }
 
 export class UpdateVendorDto {
-  @IsString()
+  @IsString({ message: "Store name must be a string" })
   @IsOptional()
   storeName?: string;
 
-  @IsString()
+  @IsString({ message: "Store description must be a string" })
   @IsOptional()
   storeDescription?: string;
 
-  @IsString()
+  @IsString({ message: "Store image must be a string" })
   @IsOptional()
   storeImage?: string;
 
-  @IsString()
+  @IsString({ message: "Store banner must be a string" })
   @IsOptional()
   storeBanner?: string;
 
-  @IsBoolean()
+  @IsBoolean({ message: "IsVerified must be a boolean" })
   @IsOptional()
   isVerified?: boolean;
 
-  @IsArray()
+  @IsArray({ message: "Products must be an array" })
   @IsOptional()
-  @IsString({ each: true })
+  @IsString({ each: true, message: "Each product must be a string" })
   products?: string[];
 
-  @IsObject()
+  @IsObject({ message: "Subscription must be an object" })
   @IsOptional()
   @ValidateNested()
   @Type(() => SubscriptionDto)

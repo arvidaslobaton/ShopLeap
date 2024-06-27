@@ -16,8 +16,16 @@ export default class VendorController extends Api {
   ) => {
     try {
       const newVendor = await this.vendorService.createVendor(req.body);
+      if (!newVendor) {
+        this.send(
+          res,
+          newVendor,
+          HttpStatusCode.BadRequest,
+          "Must provide valid data"
+        );
+      }
 
-      this.send(res, newVendor, HttpStatusCode.Created, "User");
+      this.send(res, newVendor, HttpStatusCode.Created, "Vendor Created");
     } catch (error) {
       console.log(error);
     }
@@ -49,14 +57,20 @@ export default class VendorController extends Api {
     next: NextFunction
   ) => {
     try {
-      const vendor = await this.vendorService.getVendorBySlug(req.params.slug);
+      const vendorBySlug = await this.vendorService.getVendorBySlug(
+        req.params.slug
+      );
 
-      this.send(res, vendor, HttpStatusCode.Created, "Get Vendor By Slug");
+      const statusCode = vendorBySlug?.error
+        ? HttpStatusCode.NotFound
+        : HttpStatusCode.Ok;
+
+      this.send(res, vendorBySlug, statusCode, "Get Vendor By Slug");
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      next(error); // pass the error to the error handling middleware
     }
   };
-
   // @desc Update Vendor
   // @router /api/vendor/:id
   // @access Private
@@ -66,17 +80,25 @@ export default class VendorController extends Api {
     next: NextFunction
   ) => {
     try {
-      const newVendor = await this.vendorService.updateVendor(
+      const updatedVendor = await this.vendorService.updateVendor(
         req.params.id,
         req.body
       );
 
-      this.send(res, newVendor, HttpStatusCode.Created, "Update Vendor");
+      const statusCode = updatedVendor?.error
+        ? HttpStatusCode.NotFound
+        : HttpStatusCode.Ok;
+
+      this.send(res, updatedVendor, statusCode, "Update Vendor");
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      next(error); // pass the error to the error handling middleware
     }
   };
 
+  // @desc Delete Vendor
+  // @router /api/vendor/:id
+  // @access Private
   public deleteVendor = async (
     req: Request,
     res: Response,
@@ -85,9 +107,14 @@ export default class VendorController extends Api {
     try {
       const vendor = await this.vendorService.deleteVendor(req.params.id);
 
-      this.send(res, vendor, HttpStatusCode.Created, "Delete Vendor");
+      const statusCode = vendor?.error
+        ? HttpStatusCode.NotFound
+        : HttpStatusCode.Ok;
+
+      this.send(res, vendor, statusCode, "Delete Vendor");
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      next(error); // pass the error to the error handling middleware
     }
   };
 }
