@@ -22,9 +22,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Category = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+const slugify_1 = __importDefault(require("slugify"));
 const categorySchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -34,17 +38,21 @@ const categorySchema = new mongoose_1.Schema({
     description: {
         type: String,
     },
-    parentCategory: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "Category",
+    slug: {
+        type: String,
+        unique: true,
     },
     subCategory: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "Category",
+            ref: "SubCategory",
         },
     ],
 }, {
     timestamps: true,
+});
+categorySchema.pre("save", async function (next) {
+    this.slug = (0, slugify_1.default)(this.name.toLowerCase());
+    next();
 });
 exports.Category = mongoose_1.default.model("Category", categorySchema);

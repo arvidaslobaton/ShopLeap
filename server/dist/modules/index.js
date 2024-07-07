@@ -5,6 +5,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const users_route_1 = __importDefault(require("./users/users.route"));
+const vendor_route_1 = __importDefault(require("./vendor/vendor.route"));
+const product_route_1 = __importDefault(require("./product/product.route"));
+const brand_route_1 = __importDefault(require("./brand/brand.route"));
+const category_route_1 = __importDefault(require("./category/category.route"));
+const subCategory_route_1 = __importDefault(require("./subCategory/subCategory.route"));
+const wishlist_route_1 = __importDefault(require("./wishlist/wishlist.route"));
 const router = (0, express_1.Router)();
 router.use("/users", users_route_1.default);
+router.use("/vendor", vendor_route_1.default);
+router.use("/product", product_route_1.default);
+router.use("/brand", brand_route_1.default);
+router.use("/category", category_route_1.default);
+router.use("/subCategory", subCategory_route_1.default);
+router.use("/wishlist", wishlist_route_1.default);
 exports.default = router;

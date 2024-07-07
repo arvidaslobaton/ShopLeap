@@ -1,9 +1,10 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
+import slugify from "slugify";
 
 export interface ICategory extends Document {
   name: string;
   description?: string;
-  parentCategory?: mongoose.Types.ObjectId;
+  slug: string;
   subCategory?: mongoose.Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -19,14 +20,14 @@ const categorySchema = new Schema<ICategory>(
     description: {
       type: String,
     },
-    parentCategory: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
+    slug: {
+      type: String,
+      unique: true,
     },
     subCategory: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Category",
+        ref: "SubCategory",
       },
     ],
   },
@@ -34,6 +35,11 @@ const categorySchema = new Schema<ICategory>(
     timestamps: true,
   }
 );
+
+categorySchema.pre("save", async function (next) {
+  this.slug = slugify(this.name.toLowerCase());
+  next();
+});
 
 export const Category: Model<ICategory> = mongoose.model<ICategory>(
   "Category",

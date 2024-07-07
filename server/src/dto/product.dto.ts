@@ -8,7 +8,6 @@ import {
   Validate,
   ValidateNested,
 } from "class-validator";
-import { Type } from "class-transformer";
 import { isValidObjectId } from "mongoose";
 
 export class CreateProductDto {
