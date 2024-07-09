@@ -26,9 +26,9 @@ export default class BrandService {
 
   public async getAllBrands() {
     try {
-      const products = await Brand.find();
+      const brands = await Brand.find();
 
-      return { brands: products };
+      return { brands: brands };
     } catch (error) {
       console.log(error);
     }

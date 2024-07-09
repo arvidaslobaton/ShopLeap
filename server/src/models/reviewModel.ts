@@ -13,6 +13,7 @@ export interface IReview extends Document {
   rating: number;
   comment?: string;
   vendorReply?: IVendorReply;
+  isApproved?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -47,6 +48,10 @@ const reviewSchema = new Schema<IReview>(
         type: Date,
         default: Date.now,
       },
+    },
+    isApproved: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

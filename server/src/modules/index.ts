@@ -6,6 +6,8 @@ import brand from "./brand/brand.route";
 import category from "./category/category.route";
 import subCategory from "./subCategory/subCategory.route";
 import wishlist from "./wishlist/wishlist.route";
+import review from "./review/review.route";
+import uploadRouter from "./upload/upload.route";
 
 const router: Router = Router();
 
@@ -16,5 +18,7 @@ router.use("/brand", brand);
 router.use("/category", category);
 router.use("/subCategory", subCategory);
 router.use("/wishlist", wishlist);
+router.use("/review", review);
+router.use("/upload", uploadRouter);
 
 export default router;
