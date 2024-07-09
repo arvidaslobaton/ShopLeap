@@ -3,7 +3,7 @@ import fs from "fs";
 
 const BASE_HOSTNAME = "storage.bunnycdn.com";
 const HOSTNAME = BASE_HOSTNAME;
-const ACCESS_KEY = "c7698d5c-1e4c-4ac5-98d6ea15e74b-1bb1-4fa3";
+const ACCESS_KEY = "";
 const STORAGE_ZONE_NAME = "shopleap-ecom";
 
 export const uploadFile = async (req, res) => {
